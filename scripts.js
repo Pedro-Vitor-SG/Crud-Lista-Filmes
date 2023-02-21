@@ -1,4 +1,3 @@
-
 //VALORES INCIAIS DO OBJETO
 let dados = {
   titulo: "",
@@ -6,7 +5,6 @@ let dados = {
   categoria: "",
   link: "",
 };
-
 
 //FUNCAO PARA ATUALIZAR DADOS
 const atualizarDados = () => {
@@ -25,7 +23,6 @@ const atualizarDados = () => {
 
 //MONTA O NOVO ITEM DA LISTA
 const montaItem = () => {
-
   //PEGA O TEMPO JÁ QUE O TEMPO NÃO SE REPETE USAMOS COM 'id'
   const id = new Date().getTime();
 
@@ -41,12 +38,15 @@ const montaItem = () => {
             ><button class="btn btn-danger excluirFilme" data-id="${id}">Excluir</button>
             </td>
         <tr>
-    `; //TEMOS UM 'tr' QUE VAI TER SEMPRE UM ID DIFERENTE
-       //TEMOS ALGUNS TD's, SEMPRE ATUALIZANDO AS INFORMAÇÕES, SENDO QUE OS 2 ULTIMOS USAM O ATRIBUTO 'data' PARA, FAZERMOS A FUNÇÃO DE ABRIR O LINK DO FILME E EXCLUIR O FILME PELO ID
+    `; //TEMOS UM 'tr' QUE VAI TER SEMPRE UM ID DIFERENTE E EXCLUIREMOS A PARTIR DESSE ID
+  //TEMOS ALGUNS TD's, SEMPRE ATUALIZANDO AS INFORMAÇÕES, SENDO QUE OS 2 ULTIMOS USAM O ATRIBUTO 'data' PARA, FAZERMOS A FUNÇÃO DE ABRIR O LINK DO FILME E EXCLUIR O FILME PELO ID
 
   return item;
 };
+
+//CADASTRA O NOVO ITEM E O MOSTRAMOS NA TELA
 const cadastrar = () => {
+  //CONDICIONAL PARA EVITAR QUE ENVIE DADOS VAZIOS
   if (
     dados.titulo === "" ||
     dados.ano === 0 ||
@@ -55,12 +55,15 @@ const cadastrar = () => {
   ) {
     alert(`Preencha todos os campos!`);
   } else {
+    //ADICIONA UM NOVO ITEM SEMPRE EM PRIMEIRO
     document
       .querySelector("#lista-filmes")
       .insertAdjacentHTML("beforeend", montaItem());
 
+    //VARIAVEL VOLTA AO ESTADO INICIAL
     dados = {};
 
+    //OS ELEMENTOS HTML PASSAM A FICAREM VAZIOS NOVAMENTE
     document.querySelector("#ano").value = ``;
     document.querySelector("#titulo").value = ``;
     document.querySelector("#categoria").value = `Categoria 1`;
@@ -70,21 +73,33 @@ const cadastrar = () => {
 
 document.querySelector("#btn-cad").addEventListener("click", cadastrar);
 
+//ADICIONA EVENTO AO DOCUMENTO, FUNCIONALIDADE DE ABRIR LINK E APAGAR ELEMENTO
 document.addEventListener("click", (e) => {
+  //VARIAVEL QUE PEGA O 'target.classlist' DO ELEMENTO QUE FOI CLICADO E TRANSFORMA EM ARRAY AS CLASSES
   const listaClasse = Array.prototype.slice.call(e.target.classList);
   console.log(e);
+
+  //SE O ELEMENTO CLICADO TIVER A CLASSE
   if (e.target && listaClasse.includes("acessarFilme")) {
+    //VARIAVEL QUE RECEBE O CONTEUDO DO ATRIBUTO DATA NA PROPRIEDADE URL
     const url = e.target.dataset.url;
+
+    //ABRE UMA NOVA JANELA COM ESSA VARIAVEL
     window.open(url, "_blank");
   }
 
+  //SE O ELEMENTO CLICADO TIVER A CLASSE
   if (e.target && listaClasse.includes("excluirFilme")) {
+    //VARIAVEL QUE QUARDA A RESPOSTA DO CONFIRM (TRUE OU FALSE)
     const response = confirm(`Quer mesmo excluir esse filme?`);
 
+    //SE 'response' FOR TRUE
     if (response) {
+      //VARIAVEL QUE RECEBE O CONTEUDO DO ATRIBUTO DATA NA PROPRIEDADE ID
       const id = e.target.dataset.id;
+      
+      //EXCLUINDO O ELEMTO COM ESSE ID
       document.getElementById(id).remove();
     }
   }
 });
-
